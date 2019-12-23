@@ -7,10 +7,14 @@
 SGA(System Global Area)|모든 사용자가 공유 가능
 PGA(Program Global Area, Private Global Area)|사용자마다 공유하지 않고 개별적으로 사용
 
+<img src=https://t1.daumcdn.net/cfile/tistory/2774554D57E553DE1F />
+
 ### 1) PGA(Program Global Area)의 개념
 PGA란?
 
     데이터베이스에 접속하는 모든 유저에게 할당되는 각각의 서버 프로세스가 독자적으로 사용하는 오라클 메모리 영역
+
+<img src=https://t1.daumcdn.net/cfile/tistory/2607E33F57E554BE1B />
 
 - User Process와 Server Process
   
@@ -25,6 +29,7 @@ Server Process | User Process로 부터 SQL과 기타 정보를 전달받아 요
 :---:|---|---|---
 Dedicated Server|User Process가 Server Process에 접속하면 새로운 Server Process를 만든다.<br> PGA = 변수 저장 공간(Stack Space) + UGA|Shared 보다 관리 용이|메모리 사용량이 크다
 Shared Server|하나의 Server Process를 여러 User Process들이 공유.<br> PGA = 변수 저장 공간(Stack Space),<br> UGA = 기본적으로 Shared Pool, Large Pool에 저장하기도 한다.|메모리 사용량이 적다|Server Process가 죽으면 모든 User Process가 Rollback(관리가 힘들다)
+
 
 구분|항목|내용
 |:---:|---|---
@@ -73,7 +78,9 @@ _PGA_MAX_SIZE|X|Default|하나의 서버 프로세스가 사용 가능한 최대
 SGA란?
 
     - 오라클이 SQL을 수행하기 위해 데이터를 읽거나 변경할 때 사용하는 공용 메모리 영역
-  
+
+<img src=https://t1.daumcdn.net/cfile/tistory/234A193657E5F06F11 />
+
 항목 | 내용 | 파라미터
 :---:|---|---
 Shared Pool | SQL의 빠른 파싱(Parsing) | SHARED_POOL_SIZE(동적 영역)
@@ -82,6 +89,8 @@ Shared Pool | SQL의 빠른 파싱(Parsing) | SHARED_POOL_SIZE(동적 영역)
 Large Pool | UGA 영역 저장, RMAN(Recovery Manager) 정보 저장, 병렬 프로세스 정보 저장, I/O 슬레이브 프로세스 정보 저장 | LARGE_POOL_SIZE
 자바(Java) Pool | 자바의 명령에 대해 파싱할 경우 사용하는 공간 | JAVA_POOL_SIZE
 Streams Pool | 기존의 데이터 복제 및 Event를 원격의 다른 DB로 전송하는 Stream을 위한 공간.|STREAMS_POLL_SIZE 
+
+<img src=https://t1.daumcdn.net/cfile/tistory/26043D3B57E5F1C02A />
 
 ### 4) SGA의 관리
 - SGA 설정 값을 변경하고자할 경우 전체 SGA를 합한 값이 SGA_MAX_SIZE 파라미터에서 정한 값 이하까지 ALTER SYSTEM SET 명령을 이용하여 변경할 수 있다.
@@ -98,6 +107,8 @@ Shared Pool 이란?
 
     파라메터 정보, 실행된 SQL, SQL 분석/실행 정보 및 오라클 오브젝트 정보를 저장하는 메모리 영역으로 SQL 파싱을 위한 공간
 - `SQL 파싱은 어떤 유저던지 파싱 정보를 공유해서 사용할 수 있어서 Shared Pool에서 진행되는 것 같다.`
+
+<img src=https://t1.daumcdn.net/cfile/tistory/270C534357E606F507 />
 
 파싱(Parsing)이란?
 
@@ -139,6 +150,8 @@ Reserved 영역 | 동적 메모리 할당을 위한 공간
 라이브러리 캐시 | DB에 접속한 유져가 실행한 SQL, 오라클이 내부적으로 사용하는 SQL, SQL에 대한 분석 정보, 실행계획 등이 저장됨. 파싱이 수행되는 공간
 데이터 딕셔너리 캐시<br>(로우 캐시)|테이블, 인덱스, 함수 및 트리거 등 오라클 오브젝트 정보 및 권한 외에도 시스템 테이블스페이스의 모든 딕셔너리 정보가 저장됨.
 
+<img src=https://t1.daumcdn.net/cfile/tistory/2579CC3F57E61D2F1A />
+
 ### 2) 라이브러리 캐시의 Subpool
 Latch와 Enqueue란?
 
@@ -179,7 +192,7 @@ Latch와 Enqueue란?
 
 ---
 # 질문
-1. Database Resolution이 뭔가요?, 참조 테이블 및 컬럼 그리고 권한을 확인하는 작업인가요?
+1. Database Resolution이 뭔가요?, 참조 테이블 및 컬럼 그리고 권한을 확인하는 작업인가요? -> Answer: O
 ---
 
 ### 4) Shared Pool의 공간 관리(해시 테이블 공간)
@@ -192,7 +205,7 @@ Latch와 Enqueue란?
 
 <br>
 
-- 메모리 조각을 할당받는 순서
+#### 메모리 조각을 할당받는 순서
   
 순번|내용
 :---:|---
@@ -219,6 +232,8 @@ Spare Free Memory(리스트)
 - 단점 : 4,400 Byte 이하의 SQL은 Reserved 공간을 사용하지 않으므로 Reserved 공간을 크게 잡으면 메모리 낭비가 발생할 수 있다.
 - Shared Pool의 5 ~ 10% 정도가 적당하다.
 
+<img src=https://t1.daumcdn.net/cfile/tistory/2776153357E62CF715 />
+
 ## 03 데이터 버퍼 캐시(Data Buffer Cache)
 데이터 버퍼 캐시란?
 
@@ -228,8 +243,13 @@ Spare Free Memory(리스트)
 
 - 데이터 버퍼 캐시도 Shared Pool의 라이브러리 캐시처럼 LRU 알고리즘으로 새로 적재하고 제거한다.
 
+<img src=https://t1.daumcdn.net/cfile/tistory/274A4A3857E69A0B2A />
+
+
 ### 1) 데이터 버퍼 캐시 활용
 - 데이터 버퍼 캐시를 사용하는 프로세스들의 역할
+
+<img src=https://t1.daumcdn.net/cfile/tistory/2543DF3757E69B6E10 />
 
 항목|내용
 :---:|---
@@ -238,20 +258,29 @@ DBWR(Database Witer)<br>백그라운드 프로세스|데이터 버퍼 캐시에 
 
 - DB_FILE_MULTIBLOCK_READ_COUNT 파라미터에 지정된 수만큼 데이터 블록을 데이터 버퍼 캐시로 한 번에 읽는다.
 - `오라클의 I/O 단위는 데이터 블록이다.` 그래서 데이터 하나만 읽으려고 해도 해당 데이터가 포함된 데이터 블록을 읽어온다.
+- 서버 프로세스는 필요한 데이터의 블록 수가 여러개 일지라도 하나씩 데이터 버퍼 캐시로 캐싱하게 된다. 하지만 SQL에서 전체 테이블 검색을 수행하는 경우 DB_FILE_MULTIBLOCKREAD_COUNT 파라미터에 의해 지정된 데이터 블록 수만큼 데이터 버퍼 캐시로 한 번에 읽게 된다.
+
 
 ### 2) 다중 데이터 블록 크기 지정
+
+<img src=https://t1.daumcdn.net/cfile/tistory/23668D3B57E69FA827 />
+
 - DB_BLOCK_SIZE 파라미터로 데이터 블록의 크기를 지정할 수 있다. 
 - 9i 부터는 여러 개의 데이터 블록을 지정할 수 있게 되었음. 변경하려면 init\<SID>.ora를 변경하면 된다. 여기서\<SID> 는 전역 데이터베이스 이름.
 
+<img src=https://t1.daumcdn.net/cfile/tistory/2110585057E6A14F05 />
+
 ### 3) 데이터 블록 크기와 데이터 버퍼 캐시
-- 데이터 블록을 크게 했을 경우
+#### 데이터 블록을 크게 했을 경우
+<img src=https://t1.daumcdn.net/cfile/tistory/256C324957E6A31B38 />
 
 항목|내용
 :---:|---
 장점|- 메모리에서 데이터 블록 사용율이 높음 (하나의 블록이 많은 데이터를 담고 있어서 자주 사용됨)<br> - 한 번의 디스크 I/O로 많은 데이터 추출 가능
 단점|데이터 블록에 대한 경합 발생 가능성 증가 (하나의 블록이 많은 데이터를 담고 있어서 유저가 경쟁)
 
-- 데이터 블록을 작게 했을 경우
+#### 데이터 블록을 작게 했을 경우
+<img src=https://t1.daumcdn.net/cfile/tistory/252E684857E6A5130B />
 
 항목|내용
 :---:|---
@@ -261,6 +290,8 @@ DBWR(Database Witer)<br>백그라운드 프로세스|데이터 버퍼 캐시에 
 
 ### 4) 다중 데이터 버퍼 캐시 설정
 - 데이터 버퍼 캐시를 어무 성격에 따라 분리하는 것
+
+<img src=https://t1.daumcdn.net/cfile/tistory/262BB34857E6A60112 />
 
 종류|내용|크기
 :---:|---|---
@@ -276,6 +307,8 @@ DBWR(Database Witer)<br>백그라운드 프로세스|데이터 버퍼 캐시에 
 
     개념 : 오브젝트 및 데이터 변경 시 생성되는 로그를 저장하는 SGA 메모리 공간
     목적 : 데이터베이스내의 모든 변경 작업에 대한 복구(Recovery)를 지원
+
+<img src=https://t1.daumcdn.net/cfile/tistory/2537454957E8A90F22 />
 
 - 해당 로그 들은 서버 프로세스에 의해 리두 로그 버퍼에 기록된 후 백그라운드 프로세스인 LGWR(Log Writer) 프로세스에 의해 파일에 저장된다.
 
@@ -362,6 +395,8 @@ Create Table as Select<br>(CTAS)|Nologging 옵션 이용|기존 테이블을 복
 ### 1) Large Pool 개념
 - Large Pool을 지정하게 되면 Shared Pool의 부하를 감소시키게 된다.
 
+<img src=https://t1.daumcdn.net/cfile/tistory/2642D43B57E8AC0039 />
+
 항목|내용
 :---:|---
 UGA 영역 저장|UGA는 세션별로 메모리가 할당되지만 DB가 공유 서버 환경으로 설정되어 있다면, `Shared Pool을 사용하게 된다. 이런 경우 파싱을 수행하는 중요한 Shared Pool 영역이 공간이 감소하게 되는데`, 이를 방지하기 위해 Large Pool을 설정하게 되면 공유 서버 환경에서도 UGA 영역이 Large Pool을 사용한다.
@@ -389,6 +424,8 @@ RMAN(Recovery Manager) 란?
 
 ## 06 자바(Java) Pool 및 Streams Pool
 ### 1) 자바 Pool
+<img src=https://t1.daumcdn.net/cfile/tistory/220F354C57E8B0DC33 />
+
 - Large Pool과 마찬가지로 필요에 따라 지정해서 사용하는 SGA영역
 - 자바 명령에 대해 파싱할 경우 사용하는 메모리공간이므로 자바를 설치하고 사용할 경우 지정해주어야 한다.
 - JAVA_POOL_SIZE 파라미터로 지정이 가능
@@ -436,12 +473,18 @@ Apply|- Destination 큐 에서 LCR을 엑세스 하여 Target 오브젝트에 �
     SQL> ALTER SYSTEM SET streams_pool_size=100 K|M|G;
 
 ## 07 오라클 메모리 관리
+
+<img src=https://t1.daumcdn.net/cfile/tistory/2438484057E8B1F80E />
+
 ### 1) 공유 메모리 자동 관리 개념
 - 공유 메모리 자동 관리를 사용하게되면 MMAN(Memory Manager)프로세스가 주기적으로 업무 부하에 따른 SGA 사용량을 파악한다.
 - 파악한 정보로 SGA_TARGET 파라미터가 지정한 범위 내에서 SGA 구성 요소의 크기를 동적으로 지정한다.
 - 각 메모리 영역의 크기가 너무 크거나 작은 경우에 메모리 낭비 또는 성능 저하를 일으키므로 업무 부하를 판단하여 각 메모리의 크기를 자동으로 조정하는 공유 메모리 자동관리(Automatic Shared Memory Managemenrt, ASMM)기능을 사용해야한다.
 
 ### 2) 공유 메모리 자동 관리 특징
+
+<img src=https://t1.daumcdn.net/cfile/tistory/2126C73C57E8B3C11A />
+
 항목|내용
 :---:|---
 SGA 관리 요소 감소|데이터베이스 관리자가 수행하던 SGA 구성요소 크기 조정을 오라클이 자동 조정
@@ -479,6 +522,8 @@ ALL|TYPICAL 수집 데이터 이외에 운영 체제 통계와 SQL 실행계획 
 - Literal SQL : 동일한 SQL이지만 바인드 변수 처리를 하지 않아 SQL을 공유할 수 없어 하드 파싱을 일으키는 형태의 SQL
 
 ### 3) 공유 메모리 자동 관리 사용 시 고려 사항
+
+<img src=https://t1.daumcdn.net/cfile/tistory/2117FA3E57E8B78103 />
 
 고려 사항|내용
 :---:|---
