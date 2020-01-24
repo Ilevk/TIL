@@ -33,7 +33,7 @@ def auto_deploy(request):
     disco-abacus-265000 프로젝트의 models에 해당 모델의 이름으로 모델을 생성함.
     여기에서 models는 AI Platform 콘솔의 맨 마지막 탭인 모델을 지칭함.
     '''
-    name = 'projects/disco-abacus-265000/models/{}'.format(json_request('model_name'))
+    name = 'projects/disco-abacus-265000/models/{}'.format(json_request['model_name'])
     try:
         '''
         해당 코드는 위의 model_name을 가진 모델이 있는지 확인하는 코드.
@@ -48,7 +48,7 @@ def auto_deploy(request):
         이름, 해당 모델이 생성될 지역 등을 포함하여 요청을 날린다.
         '''
         body = {
-            'name': json_request('model_name'),
+            'name': json_request['model_name'],
             'regions': ['asia-northeast1'],
             'onlinePredictionLogging': True,
             'onlinePredictionConsoleLogging': True
@@ -62,9 +62,9 @@ def auto_deploy(request):
     모델을 생성한 이후에는 해당 모델 안에 버전으로 관리되는 모델을 넣을 수 있게 된다.
     이하 모델 정보와 함께 AI Platform의 'Mnist_Keras'라는 모델에 'V1_Mnist' 버전이 생성된다.
     '''
-    models = 'projects/disco-abacus-265000/models/{}'.format(json_request('model_name'))
-    request_dict = {'name': json_request('version'),
-                    'deploymentUri': json_request('gs_location'),
+    models = 'projects/disco-abacus-265000/models/{}'.format(json_request['model_name'])
+    request_dict = {'name': json_request['version'],
+                    'deploymentUri': json_request['gs_location'],
                     'runtimeVersion': '1.14',
                     'framework': 'tensorflow',
                     'pythonVersion': '3.5'}
